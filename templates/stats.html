@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Статистика — TodoMaster</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <style>
+        .stats-box { background: #e3f2fd; padding: 20px; border-radius: 8px; margin: 20px 0; }
+        .stats-box p { margin: 8px 0; font-size: 1.1rem; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📊 Статистика</h1>
+        <div class="stats-box" id="statsBox">
+            <p>Загрузка...</p>
+        </div>
+        <a href="/">← На главную</a>
+    </div>
+    <script>
+        fetch('/api/stats')
+            .then(r => r.json())
+            .then(d => {
+                document.getElementById('statsBox').innerHTML = `
+                    <p><strong>Всего задач:</strong> ${d.total}</p>
+                    <p><strong>Выполнено:</strong> ${d.completed}</p>
+                    <p><strong>Процент выполненных:</strong> ${d.percent}%</p>
+                `;
+            })
+            .catch(() => { document.getElementById('statsBox').innerHTML = '<p>Ошибка загрузки</p>'; });
+    </script>
+</body>
+</html>

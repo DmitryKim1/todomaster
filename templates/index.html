@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TodoMaster</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div id="app" class="container">
+        <h1>TodoMaster</h1>
+
+        <section class="add-task">
+            <h2>Добавить задачу</h2>
+            <div class="form-row">
+                <input
+                    type="text"
+                    id="taskInput"
+                    v-model="newTitle"
+                    placeholder="Введите название задачи"
+                    @keypress.enter="addTask"
+                />
+                <button id="addBtn" @click="addTask">➕ Добавить</button>
+            </div>
+        </section>
+
+        <section class="tasks">
+            <h2>Мои задачи</h2>
+            <ul id="taskList">
+                <li
+                    v-for="task in tasks"
+                    :key="task.id"
+                    :class="{ done: task.done }"
+                >
+                    <span class="task-title" @click="toggleDone(task)">{{ task.title }}</span>
+                    <span class="task-date">{{ task.created || '' }}</span>
+                    <button class="btn-delete" @click="deleteTask(task.id)">❌ Удалить</button>
+                </li>
+            </ul>
+            <button id="clearAllBtn" class="btn-danger" @click="clearAll">🚀 Очистить все задачи</button>
+        </section>
+
+        <footer>
+            <a href="/stats">📊 Статистика</a> |
+            <a href="/health">🟢 Статус API</a> |
+            <a href="/docs">📖 Документация API</a>
+        </footer>
+    </div>
+
+    <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+    <script>
+    const { createApp } = Vue;
+    const API_BASE = '';
+
+    createApp({
+        data() {
+            return { tasks: [], newTitle: '' };
+        },
+        mounted() {
+            this.loadTasks();
+        },
+        methods: {
+            async loadTasks() {
+                const res = await fetch(API_BASE + '/tasks');
+                this.tasks = await res.json();
+            },
+            async addTask() {
+                const title = this.newTitle.trim();
+                if (!title) return;
+                await fetch(API_BASE + '/tasks', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ title }),
+                });
+                this.newTitle = '';
+                await this.loadTasks();
+            },
+            async deleteTask(id) {
+                await fetch(API_BASE + '/tasks/' + id, { method: 'DELETE' });
+                await this.loadTasks();
+            },
+            async toggleDone(task) {
+                await fetch(API_BASE + '/tasks/' + task.id, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ done: !task.done }),
+                });
+                await this.loadTasks();
+            },
+            async clearAll() {
+                if (!confirm('Удалить все задачи?')) return;
+                await fetch(API_BASE + '/tasks/clear', { method: 'DELETE' });
+                await this.loadTasks();
+            },
+        },
+    }).mount('#app');
+    </script>
+</body>
+</html>

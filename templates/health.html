@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Статус API — TodoMaster</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <style>
+        .health-ok { color: #4CAF50; font-size: 1.5rem; }
+        .health-fail { color: #f44336; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🟢 Статус API</h1>
+        <div id="healthBox">Загрузка...</div>
+        <a href="/">← На главную</a>
+    </div>
+    <script>
+        fetch('/api/health')
+            .then(r => r.json())
+            .then(d => {
+                document.getElementById('healthBox').innerHTML = 
+                    d.status === 'healthy' 
+                        ? `<p class="health-ok">✅ ${d.status}</p><p>Время: ${d.timestamp}</p>`
+                        : `<p class="health-fail">❌ ${d.status}</p>`;
+            })
+            .catch(() => { document.getElementById('healthBox').innerHTML = '<p class="health-fail">Ошибка запроса</p>'; });
+    </script>
+</body>
+</html>

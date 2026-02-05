@@ -1,0 +1,131 @@
+* {
+    box-sizing: border-box;
+}
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    background: #f5f5f5;
+}
+.container {
+    background: white;
+    padding: 24px;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+h1 {
+    margin-top: 0;
+    color: #333;
+}
+h2 {
+    font-size: 1rem;
+    color: #666;
+    margin-bottom: 10px;
+}
+.form-row {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+#taskInput {
+    flex: 1;
+    padding: 10px 14px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 1rem;
+}
+#addBtn {
+    padding: 10px 18px;
+    background: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1rem;
+}
+#addBtn:hover {
+    background: #45a049;
+}
+.tasks ul {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 16px 0;
+}
+.tasks li {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px;
+    margin-bottom: 8px;
+    background: #f9f9f9;
+    border-radius: 8px;
+    border-left: 4px solid #4CAF50;
+}
+.tasks li.done {
+    border-left-color: #999;
+    opacity: 0.8;
+}
+.tasks li.done .task-title {
+    text-decoration: line-through;
+    color: #666;
+}
+.task-title {
+    flex: 1;
+    margin-right: 10px;
+}
+.task-date {
+    font-size: 0.85rem;
+    color: #888;
+    margin-right: 10px;
+}
+.btn-delete {
+    padding: 6px 12px;
+    background: #f44336;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.9rem;
+}
+.btn-delete:hover {
+    background: #d32f2f;
+}
+.btn-danger {
+    padding: 10px 18px;
+    background: #ff5722;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1rem;
+}
+.btn-danger:hover {
+    background: #e64a19;
+}
+footer {
+    margin-top: 24px;
+    padding-top: 16px;
+    border-top: 1px solid #eee;
+    font-size: 0.9rem;
+    color: #666;
+}
+footer a {
+    color: #2196F3;
+    text-decoration: none;
+}
+footer a:hover {
+    text-decoration: underline;
+}
+@media (max-width: 500px) {
+    .form-row {
+        flex-direction: column;
+    }
+    .tasks li {
+        flex-wrap: wrap;
+    }
+    .task-date {
+        width: 100%;
+        order: 2;
+    }
+}
