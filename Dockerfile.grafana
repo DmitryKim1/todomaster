@@ -4,7 +4,7 @@ FROM ubuntu:22.04
 ENV DEBIAN_FRONTEND=noninteractive
 
 # Копируем .deb пакет (имя файла — как у тебя в grafana-pkg/)
-COPY grafana-pkg/grafana-enterprise_12.2.1_18655849634_linux_amd64.deb /tmp/grafana.deb
+COPY grafana-pkg/grafana-enterprise_12.2.1_18655849634_linux_amd64* /tmp/grafana.deb
 
 # Устанавливаем пакет и недостающие зависимости
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -14,7 +14,12 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && apt-get install -f -y \
     && rm -rf /var/lib/apt/lists/* /tmp/grafana.deb
 
+# Устанавливаем рабочую директорию (homepath для Grafana)
+WORKDIR /usr/share/grafana
+
 EXPOSE 3000
 
-# Запуск Grafana (стандартная команда после установки из .deb)
-CMD ["/usr/sbin/grafana-server", "--config", "/etc/grafana/grafana.ini", "web"]
+# Запуск Grafana от пользователя grafana (создаётся при установке .deb)
+# Указываем homepath явно
+USER grafana
+CMD ["/usr/sbin/grafana-server", "--config", "/etc/grafana/grafana.ini", "--homepath", "/usr/share/grafana", "web"]
